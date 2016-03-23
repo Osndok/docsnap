@@ -131,7 +131,7 @@ main(int argc, char *argv[]) {
         fprintf (stderr, _("\n\nCamorama version %s\n\n"), PACKAGE_VERSION);
         exit (0);
     }
-    if (max) {
+    if (max || 1) {
         cam->size = PICMAX;
     }
     if (min) {
