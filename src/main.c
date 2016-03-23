@@ -59,6 +59,14 @@ camorama_glade_handler (GladeXML* xml,
 	return NULL;
 }
 
+cam *kludgeCam;
+
+void on_usr1_signal(int signo)
+{
+	fprintf(stderr, "received usr1 signal\n");
+	capture_func(NULL, kludgeCam);
+}
+
 int
 main(int argc, char *argv[]) {
     cam cam_object, *cam;
@@ -94,7 +102,9 @@ main(int argc, char *argv[]) {
         POPT_TABLEEND
     };
 
-    cam = &cam_object;
+	signal(SIGUSR1, on_usr1_signal);
+
+    cam = kludgeCam = &cam_object;
     /* set some default values */
     cam->frame_number = 0;
     cam->pic = NULL;
