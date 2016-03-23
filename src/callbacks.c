@@ -445,9 +445,12 @@ void on_change_size_activate (GtkWidget * widget, cam * cam)
 	//gtk_widget_set_size_request (glade_xml_get_widget (cam->xml, "da"), cam->x, cam->y);
 
     frame = 0;
+	
+	/*
     gtk_window_resize (GTK_WINDOW
                        (glade_xml_get_widget (cam->xml, "main_window")), 320,
                        240);
+	*/
 
     title = g_strdup_printf ("Camorama - %s - %dx%d", cam->vid_cap.name,
                              cam->x, cam->y);
