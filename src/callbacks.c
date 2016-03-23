@@ -441,8 +441,8 @@ void on_change_size_activate (GtkWidget * widget, cam * cam)
     get_win_info (cam);
 
     cam->pixmap = gdk_pixmap_new (NULL, cam->x, cam->y, cam->desk_depth);
-    gtk_widget_set_size_request (glade_xml_get_widget (cam->xml, "da"),
-                                 cam->x, cam->y);
+
+	//gtk_widget_set_size_request (glade_xml_get_widget (cam->xml, "da"), cam->x, cam->y);
 
     frame = 0;
     gtk_window_resize (GTK_WINDOW

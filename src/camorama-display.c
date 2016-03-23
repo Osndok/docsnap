@@ -93,13 +93,56 @@ display_expose_event (GtkWidget     * widget,
 {
 	CamoDisplay* self = CAMO_DISPLAY (widget);
 
+	cairo_t* downsampled=gdk_cairo_create(widget->window);
+	{
+		gdk_cairo_region(downsampled, event->region);
+	}
+
+	/*
+	GdkPixbuf *downsampled=gdk_pixbuf_scale_simple(
+		self->_private->camera->pixmap,
+		320,
+		240,
+		GDK_INTERP_NEAREST
+	);
+	*/
+
+	if (0)
 	gdk_draw_drawable (widget->window,
 			   widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
 			   self->_private->camera->pixmap,
 			   event->area.x, event->area.y, event->area.x,
-			   event->area.y, event->area.width, event->area.height);
+			   event->area.y, -1, -1);//event->area.width, event->area.height);
+
+	//cairo_set_source_rgb(downsampled, 0.25, 0.6, 0.8);
+	gdk_cairo_set_source_pixmap(
+		downsampled,
+		self->_private->camera->pixmap,
+		0,
+		0
+	);
+
+	double scale_factor=0.1;//100/3268;
+	/*
+	cairo_fill(downsampled);
+	cairo_scale(downsampled, 0.25, 0.25);
+	cairo_rectangle(downsampled, 0,0, 0.5, 0.6);
+	cairo_stroke(downsampled);
+	*/
+	cairo_t* cr=downsampled;
+	//cairo_set_source_rgb(cr, 0.2, 0.3, 0.8);
+  //cairo_rectangle(cr, 10, 10, 90, 90);    
+  cairo_fill(cr);
+
+  cairo_scale(cr, scale_factor, scale_factor);
+  gdk_cairo_set_source_pixmap(downsampled, self->_private->camera->pixmap, 0, 0);
+  cairo_rectangle(cr, 0, 0, 3264, 2448);    
+  cairo_fill(cr);      
 
 	frames++;
+
+	//g_object_unref(downsampled);
+	cairo_destroy(downsampled);
 
 	return FALSE;
 }
