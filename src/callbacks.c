@@ -707,10 +707,16 @@ void init_cam (GtkWidget * capture, cam * cam)
 
 void capture_func (GtkWidget * widget, cam * cam)
 {
-    if (cam->debug == TRUE) {
-        printf
-            ("capture_func\nx = %d, y = %d, depth = %d, realloc size = %d\n",
-             cam->x, cam->y, cam->depth, (cam->x * cam->y * cam->depth));
+    if (cam->debug == TRUE)
+	{
+        fprintf(
+			stderr,
+			"capture_func\nx = %d, y = %d, depth = %d, realloc size = %d\n",
+			cam->x,
+			cam->y,
+			cam->depth,
+			(cam->x * cam->y * cam->depth)
+		);
     }
 
     memcpy (cam->tmp, cam->pic_buf, cam->x * cam->y * cam->depth);
@@ -808,21 +814,30 @@ void update_tooltip (cam * cam)
 {
     gchar *tooltip_text;
 
-    if (cam->debug == TRUE) {
-        printf ("update_tooltip called\n");
+    if (cam->debug == TRUE)
+	{
+        fprintf(stderr, "update_tooltip called\n");
     }
-    if (cam->acap == TRUE) {
+
+    if (cam->acap == TRUE)
+	{
         tooltip_text =
             g_strdup_printf
             (_("Local Capture: %d\nRemote Capture: %d\nCapture Interval: %d"),
              cam->cap, cam->rcap, cam->timeout_interval / 60000);
-        if (cam->debug == TRUE) {
-            printf ("tip - acap on\n");
+
+		if (cam->debug == TRUE)
+		{
+            fprintf(stderr, "tip - acap on\n");
         }
-    } else {
-        if (cam->debug == TRUE) {
-            printf ("tip - acap off\n");
+    }
+    else
+	{
+        if (cam->debug == TRUE)
+		{
+            fprintf(stderr, "tip - acap off\n");
         }
+
         tooltip_text = g_strdup_printf (_("Automatic Capture Disabled"));
     }
     gtk_status_icon_set_tooltip(cam->tray_icon, tooltip_text);

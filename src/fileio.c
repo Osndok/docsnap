@@ -344,6 +344,11 @@ static int print_error (GnomeVFSResult result, const char *uri_string)
 
 int local_save (cam * cam)
 {
+	if (cam->debug == TRUE)
+	{
+		fprintf(stderr,"local_save()\n");
+	}
+
     int fc;
     gchar *filename, *ext;
     time_t t;
@@ -420,11 +425,23 @@ int local_save (cam * cam)
         return -1;
     }
 
+    if (cam->debug == TRUE)
+	{
+		fprintf(stderr, "gdk_pixbuf_new_from_data\n");
+	}
+
     pb = gdk_pixbuf_new_from_data (cam->tmp, GDK_COLORSPACE_RGB, FALSE, 8,
                                    cam->x, cam->y,
                                    (cam->x * cam->vid_pic.depth / 8), NULL,
                                    NULL);
-    pbs = gdk_pixbuf_save (pb, filename, ext, NULL, NULL);
+    if (cam->debug == TRUE)
+	{
+		fprintf(stderr, "gdk_pixbuf_save\n");
+	}
+
+	//NB: This method is SLOW...
+	pbs = gdk_pixbuf_save (pb, filename, ext, NULL, NULL);
+
      if (pbs == FALSE) {
         error_message =
             g_strdup_printf (_("Could not save image '%s/%s'."),
@@ -434,6 +451,8 @@ int local_save (cam * cam)
         g_free (error_message);
         return -1;
     }
+
+    fprintf(stdout, "%s/%s\n", cam->pixdir, filename);
 
     g_free (filename);
     return 0;

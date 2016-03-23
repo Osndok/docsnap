@@ -8,6 +8,9 @@
 extern int frame_number;
 extern int errno;
 
+//TODO: replace all printf statements with debugging/stdout statements...
+#define printf(...) fprintf(stderr, __VA_ARGS__)
+
 void print_cam(cam *cam){
 	printf("\nCamera Info\n");
 	printf("-------------\n");
