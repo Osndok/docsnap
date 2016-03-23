@@ -1,0 +1,13 @@
+*.o
+/po
+/stamp-h1
+
+*.kate-swp
+Makefile
+
+/*.cache
+/config.*
+/intltool-*
+/src/.deps
+/src/camorama
+/data/camorama.schemas
