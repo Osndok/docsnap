@@ -459,7 +459,7 @@ load_interface(cam* cam) {
                               (cam->xml, "string_entry"), cam->usestring);
 
     gtk_widget_set_size_request (glade_xml_get_widget (cam->xml, "da"),
-                                 cam->x, cam->y);
+                                 320, 240);
 
     prefswindow = glade_xml_get_widget (cam->xml, "prefswindow");
 }
