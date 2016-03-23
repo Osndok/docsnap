@@ -166,7 +166,7 @@ main(int argc, char *argv[]) {
 	if(gconf_device) {
 		cam->video_dev = g_strdup(gconf_device);
 	} else {
-		cam->video_dev = g_strdup ("/dev/video0");
+		cam->video_dev = g_strdup ("/dev/video1");
 	}
     } else {
         cam->video_dev = g_strdup (poopoo);
@@ -255,11 +255,14 @@ main(int argc, char *argv[]) {
     }
     cam->pixmap = gdk_pixmap_new (NULL, cam->x, cam->y, cam->desk_depth);
 
-    filename =
+    filename = "data/camorama.glade";
+	/*
         gnome_program_locate_file (NULL,
                                    GNOME_FILE_DOMAIN_APP_DATADIR,
                                    "camorama/camorama.glade", TRUE, NULL);
-    if (filename == NULL) {
+	*/
+    if (filename == NULL)
+	{
         error_dialog (_
                       ("Couldn't find the main interface file (camorama.glade)."));
         exit (1);
