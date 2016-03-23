@@ -122,7 +122,7 @@ display_expose_event (GtkWidget     * widget,
 		0
 	);
 
-	double scale_factor=0.1;//100/3268;
+	double scale_factor=0.1;//event->area.width/3264;//100/3268;
 	/*
 	cairo_fill(downsampled);
 	cairo_scale(downsampled, 0.25, 0.25);
@@ -132,7 +132,7 @@ display_expose_event (GtkWidget     * widget,
 	cairo_t* cr=downsampled;
 	//cairo_set_source_rgb(cr, 0.2, 0.3, 0.8);
   //cairo_rectangle(cr, 10, 10, 90, 90);    
-  cairo_fill(cr);
+  //cairo_fill(cr);
 
   cairo_scale(cr, scale_factor, scale_factor);
   gdk_cairo_set_source_pixmap(downsampled, self->_private->camera->pixmap, 0, 0);
