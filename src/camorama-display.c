@@ -115,6 +115,7 @@ display_expose_event (GtkWidget     * widget,
 			   event->area.y, -1, -1);//event->area.width, event->area.height);
 
 	//cairo_set_source_rgb(downsampled, 0.25, 0.6, 0.8);
+	if (0)
 	gdk_cairo_set_source_pixmap(
 		downsampled,
 		self->_private->camera->pixmap,
@@ -134,10 +135,12 @@ display_expose_event (GtkWidget     * widget,
   //cairo_rectangle(cr, 10, 10, 90, 90);    
   //cairo_fill(cr);
 
-  cairo_scale(cr, scale_factor, scale_factor);
-  gdk_cairo_set_source_pixmap(downsampled, self->_private->camera->pixmap, 0, 0);
-  cairo_rectangle(cr, 0, 0, 3264, 2448);    
-  cairo_fill(cr);      
+	//cairo_pattern_set_filter (cairo_get_source (cr), CAIRO_FILTER_NEAREST);
+	cairo_scale(cr, scale_factor, scale_factor);
+	gdk_cairo_set_source_pixmap(downsampled, self->_private->camera->pixmap, 0, 0);
+	cairo_pattern_set_filter (cairo_get_source (cr), CAIRO_FILTER_NEAREST);
+	//cairo_rectangle(cr, 0, 0, 3264, 2448);    
+	cairo_fill(cr);      
 
 	frames++;
 
