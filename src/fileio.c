@@ -453,6 +453,7 @@ int local_save (cam * cam)
     }
 
     fprintf(stdout, "%s/%s\n", cam->pixdir, filename);
+	fflush(stdout);
 
     g_free (filename);
     return 0;
