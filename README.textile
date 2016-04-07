@@ -17,3 +17,8 @@ become the upstream for such projects and is not against making such expansions 
 projects (I already have one in mind, actually).
 
 Cheers.
+
+h2. Links
+
+* Camorama - https://github.com/alessio/camorama
+
