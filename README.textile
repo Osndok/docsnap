@@ -1,0 +1,19 @@
+
+h1. docsnap
+
+*docsnap* is intended to be a cog in a larger document scanning workflow. At the moment, it is little
+more than a kludgy hack against the "camorama" source (to which it is a derivative work / forked project).
+
+These are it's primary features / goals:
+* to provide a "view finder" window that gives a sense of the image to be captured,
+* to capture an image at the full/native resolution of the camera,
+* to not re-initialize the underlying device during preview or capture (as this greatly bothers the focus on my Ziggi HD-Plus document camera)
+* to be usable as a subprogram for image capture by:
+** allowing local programs to signal a capture event via a *USR1* process signal
+** printing all captured images to *STDOUT* so the wrapping process knows where to get the product.
+
+In particular, it is not (and should never become) a full scanning interface, though it may ultimately
+become the upstream for such projects and is not against making such expansions easier for downstream
+projects (I already have one in mind, actually).
+
+Cheers.
