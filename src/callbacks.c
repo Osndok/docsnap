@@ -544,7 +544,8 @@ apply_filters(cam* cam) {
 }
 
 /*
- * get image from cam - does all the work ;) 
+ * Not called on my system... perhaps some cameras (or kernels?) require the direct read() logic, 
+ * and not the buffering?
  */
 gint
 read_timeout_func(cam* cam) {
@@ -585,6 +586,9 @@ read_timeout_func(cam* cam) {
 
 }
 
+/*
+ * get image from cam - does all the work :-) 
+ */
 gint timeout_func (cam * cam)
 {
     int i, count = 0;
@@ -610,17 +614,29 @@ gint timeout_func (cam * cam)
         break;
     }
     count++;
+
     /*
-     * refer the frame 
+     * make pic_buf point to the current frame...
      */
     cam->pic_buf = cam->pic + cam->vid_buf.offsets[frame];
-    if (cam->vid_pic.palette == VIDEO_PALETTE_YUV420P) {
+
+    if (cam->vid_pic.palette == VIDEO_PALETTE_YUV420P)
+	{
         yuv420p_to_rgb (cam->pic_buf, cam->tmp, cam->x, cam->y, cam->depth);
         cam->pic_buf = cam->tmp;
     }
 
 	apply_filters(cam);
 
+	/*
+	 * TODO: it might be nice to be able to do the median on more than the frames that
+	 * the hardware buffer gives us...
+	 */
+	if (offThreadCaptureTrigger)
+	{
+		capture_func(NULL, cam);
+		offThreadCaptureTrigger=0;
+	}
 
     gc = gdk_gc_new (cam->pixmap);
 
@@ -634,8 +650,13 @@ gint timeout_func (cam * cam)
                                 0, cam->x, cam->y);
 
     cam->vid_map.frame = frame;
-    if (v4l1_ioctl (cam->dev, VIDIOCMCAPTURE, &cam->vid_map) < 0) {
-        if (cam->debug == TRUE) {
+
+	//VIDIOCMCAPTURE tells the hardware to fill the memory buffer
+	//after this point, we are not gaurnteed that the memory buffer will be consistent.
+    if (v4l1_ioctl (cam->dev, VIDIOCMCAPTURE, &cam->vid_map) < 0)
+	{
+        if (cam->debug == TRUE)
+		{
             fprintf (stderr, "Unable to capture image (VIDIOCMCAPTURE)\n");
         }
         error_dialog (_("Unable to capture image."));

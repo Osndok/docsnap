@@ -59,12 +59,19 @@ camorama_glade_handler (GladeXML* xml,
 	return NULL;
 }
 
-cam *kludgeCam;
-
 void on_usr1_signal(int signo)
 {
 	fprintf(stderr, "received usr1 signal\n");
-	capture_func(NULL, kludgeCam);
+	
+	if (offThreadCaptureTrigger)
+	{
+		fprintf(stderr, "ERROR: a capture series appears to already be in progress\n", offThreadCaptureTrigger);
+	}
+	else
+	{
+		//captureTriggerFrameNumber=NUM_FRAMES_TO_MERGE;
+		offThreadCaptureTrigger=1;
+	}
 }
 
 int
@@ -104,7 +111,7 @@ main(int argc, char *argv[]) {
 
 	signal(SIGUSR1, on_usr1_signal);
 
-    cam = kludgeCam = &cam_object;
+    cam = &cam_object;
     /* set some default values */
     cam->frame_number = 0;
     cam->pic = NULL;

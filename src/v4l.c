@@ -243,6 +243,7 @@ void set_win_info(cam * cam)
 void set_buffer(cam * cam)
 {
    char *msg;
+
    if(v4l1_ioctl(cam->dev, VIDIOCGMBUF, &cam->vid_buf) == -1) {
       msg = g_strdup_printf(_("Could not connect to video device (%s).\nPlease check connection."), cam->video_dev);
       error_dialog(msg);

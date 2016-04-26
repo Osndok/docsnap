@@ -11,6 +11,8 @@
 # include "font_6x11.h"
 #include <gnome.h>
 
+int offThreadCaptureTrigger;
+
 static int print_error (GnomeVFSResult result, const char *uri_string);
 
 /* add timestamp/text to image - "borrowed" from gspy */
