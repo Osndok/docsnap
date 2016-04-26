@@ -729,8 +729,9 @@ void init_cam (GtkWidget * capture, cam * cam)
 
 void basicThreeByteMedianOfThreePixelMerge(char *a, char *b, char *c, char *out)
 {
-	//V4L1 buffers are presumed to be little endian.
+	//V4L1 buffers are presumed to be little endian, platform is assumed to be big endian.
 	//TODO: there must be some way to validate this... this looks very untested and error prone.
+	/*
 	int a2=(*a);
 	{
 		a2<<=8;
@@ -754,6 +755,10 @@ void basicThreeByteMedianOfThreePixelMerge(char *a, char *b, char *c, char *out)
 		c2<<=8;
 		c2|=(*(c+2));
 	}
+	*/
+	int a2=( *(a+2)<<16 | *(a+1)<<8 | *a);
+	int b2=( *(b+2)<<16 | *(b+1)<<8 | *b);
+	int c2=( *(c+2)<<16 | *(c+1)<<8 | *c);
 
 	//There are six possible permutations....
 	if (a2<b2)
