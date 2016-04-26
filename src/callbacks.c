@@ -628,10 +628,8 @@ gint timeout_func (cam * cam)
 
 	apply_filters(cam);
 
-	/*
-	 * TODO: it might be nice to be able to do the median on more than the frames that
-	 * the hardware buffer gives us...
-	 */
+	//int bytesPerFrame=(cam->x * cam->y * cam->depth);
+
 	if (offThreadCaptureTrigger)
 	{
 		capture_func(NULL, cam);
@@ -729,6 +727,87 @@ void init_cam (GtkWidget * capture, cam * cam)
     frame = 0;
 }
 
+void basicThreeByteMedianOfThreePixelMerge(char *a, char *b, char *c, char *out)
+{
+	//V4L1 buffers are presumed to be little endian.
+	//TODO: there must be some way to validate this... this looks very untested and error prone.
+	int a2=(*a);
+	{
+		a2<<=8;
+		a2|=(*(a+1));
+		a2<<=8;
+		a2|=(*(a+2));
+	}
+
+	int b2=(*b);
+	{
+		b2<<=8;
+		b2|=(*(b+1));
+		b2<<=8;
+		b2|=(*(b+2));
+	}
+	
+	int c2=(*c);
+	{
+		c2<<=8;
+		c2|=(*(c+1));
+		c2<<=8;
+		c2|=(*(c+2));
+	}
+
+	//There are six possible permutations....
+	if (a2<b2)
+	{
+		if (c2<a2)
+		{
+			//C A B
+			*(out)=*(a);
+			*(out+1)=*(a+1);
+			*(out+2)=*(a+1);
+		}
+		else
+		if (b2<c2)
+		{
+			//A B C
+			*(out)=*(b);
+			*(out+1)=*(b+1);
+			*(out+2)=*(b+1);
+		}
+		else
+		{
+			//A C B
+			*(out)=*(c);
+			*(out+1)=*(c+1);
+			*(out+2)=*(c+1);
+		}
+	}
+	else
+	{
+		if (c2<b2)
+		{
+			//C B A
+			*(out)=*(b);
+			*(out+1)=*(b+1);
+			*(out+2)=*(b+1);
+		}
+		else
+		if (a2<c2)
+		{
+			//B A C
+			*(out)=*(a);
+			*(out+1)=*(a+1);
+			*(out+2)=*(a+1);
+		}
+		else
+		{
+			//B C A
+			*(out)=*(c);
+			*(out+1)=*(c+1);
+			*(out+2)=*(c+1);
+		}
+	}
+}
+
 void capture_func (GtkWidget * widget, cam * cam)
 {
     if (cam->debug == TRUE)
@@ -743,7 +822,42 @@ void capture_func (GtkWidget * widget, cam * cam)
 		);
     }
 
-    memcpy (cam->tmp, cam->pic_buf, cam->x * cam->y * cam->depth);
+    /*
+	 * To improve image quality, we take the TEMPORAL MEDIAN of all the frames that are currently
+	 * in the video buffer (in my tests, this is 4, but the docs say it can be as high as 32).
+	 *
+	 * TODO: use all the available frames, not just three recent frames.
+    int frame;
+
+    for(frame = 0; frame < cam->vid_buf.frames; frame++)
+	{
+		//cam->pic_buf = cam->pic + cam->vid_buf.offsets[frame];
+    	
+	}
+	*/
+
+	//fprintf(stderr, "cam->depth=%d\n", cam->depth);
+
+	if (cam->depth == 3 && cam->vid_buf.frames >= 3)
+	{
+		int numPixels=cam->x * cam->y;
+		int pixel;
+
+		char* alpha=cam->pic + cam->vid_buf.offsets[0];
+		char* beta=cam->pic + cam->vid_buf.offsets[1];
+		char* delta=cam->pic + cam->vid_buf.offsets[2];
+
+		for (pixel=0; pixel<numPixels; pixel++)
+		{
+			int o=pixel*3;
+			basicThreeByteMedianOfThreePixelMerge(alpha+o, beta+o, delta+o, cam->tmp+o);
+		}
+	}
+	else
+	{
+		fprintf(stderr, "unable to use 3b3 median (%d, %d)\n", cam->depth, cam->vid_buf.frames);
+		memcpy (cam->tmp, cam->pic_buf, cam->x * cam->y * cam->depth);
+	}
 
     if (cam->rcap == TRUE) {
         remote_save (cam);
