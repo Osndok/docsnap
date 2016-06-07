@@ -768,7 +768,7 @@ void basicThreeByteMedianOfThreePixelMerge(char *a, char *b, char *c, char *out)
 			//C A B
 			*(out)=*(a);
 			*(out+1)=*(a+1);
-			*(out+2)=*(a+1);
+			*(out+2)=*(a+2);
 		}
 		else
 		if (b2<c2)
@@ -776,14 +776,14 @@ void basicThreeByteMedianOfThreePixelMerge(char *a, char *b, char *c, char *out)
 			//A B C
 			*(out)=*(b);
 			*(out+1)=*(b+1);
-			*(out+2)=*(b+1);
+			*(out+2)=*(b+2);
 		}
 		else
 		{
 			//A C B
 			*(out)=*(c);
 			*(out+1)=*(c+1);
-			*(out+2)=*(c+1);
+			*(out+2)=*(c+2);
 		}
 	}
 	else
@@ -793,7 +793,7 @@ void basicThreeByteMedianOfThreePixelMerge(char *a, char *b, char *c, char *out)
 			//C B A
 			*(out)=*(b);
 			*(out+1)=*(b+1);
-			*(out+2)=*(b+1);
+			*(out+2)=*(b+2);
 		}
 		else
 		if (a2<c2)
@@ -801,14 +801,14 @@ void basicThreeByteMedianOfThreePixelMerge(char *a, char *b, char *c, char *out)
 			//B A C
 			*(out)=*(a);
 			*(out+1)=*(a+1);
-			*(out+2)=*(a+1);
+			*(out+2)=*(a+2);
 		}
 		else
 		{
 			//B C A
 			*(out)=*(c);
 			*(out+1)=*(c+1);
-			*(out+2)=*(c+1);
+			*(out+2)=*(c+2);
 		}
 	}
 }
