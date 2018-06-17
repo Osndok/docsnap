@@ -576,6 +576,8 @@ void capture_func (GtkWidget* widget, cam* cam, gchar* keyqualifier)
 		);
     }
 
+	//TODO: update the status bar with 'capturing'
+
     /*
 	 * To improve image quality, we take the TEMPORAL MEDIAN of all the frames that are currently
 	 * in the video buffer (in my tests, this is 4, but the docs say it can be as high as 32).

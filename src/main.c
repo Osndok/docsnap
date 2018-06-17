@@ -76,37 +76,31 @@ void on_usr1_signal(int signo)
 }
 
 int
-main(int argc, char *argv[]) {
+main(int argc, char *argv[])
+{
     cam cam_object, *cam;
     Display *display;
     Screen *screen_num;
-    gchar *poopoo = NULL;
-    gchar *pixfilename = "camorama/camorama.png";
+    gchar *specifiedDevice = NULL;
+    //XXX: gchar *pixfilename = "camorama/camorama.png";
+    gchar *directory=NULL;
     gchar *filename;            //= "/usr/opt/garnome/share/camorama/camorama.glade";
     int x = -1, y = -1;
-    gboolean buggery = FALSE;
+    gboolean debugEnabled = FALSE;
     GtkWidget *button;
     GConfClient *gc;
 
     const struct poptOption popt_options[] = {
-        {"version", 'V', POPT_ARG_NONE, &ver, 0,
-         N_("show version and exit"), NULL},
-        {"device", 'd', POPT_ARG_STRING, &poopoo, 0,
-         N_("v4l device to use"), NULL},
-        {"debug", 'D', POPT_ARG_NONE, &buggery, 0,
-         N_("enable debugging code"), NULL},
-        {"width", 'x', POPT_ARG_INT, &x, 0, N_("capture width"),
-         NULL},
-        {"height", 'y', POPT_ARG_INT, &y, 0, N_("capture height"),
-         NULL},
-        {"max", 'M', POPT_ARG_NONE, &max, 0,
-         N_("maximum capture size"), NULL},
-        {"min", 'm', POPT_ARG_NONE, &min, 0,
-         N_("minimum capture size"), NULL},
-        {"half", 'H', POPT_ARG_NONE, &half, 0,
-         N_("middle capture size"), NULL},
-        {"read", 'R', POPT_ARG_NONE, &use_read, 0,
-         N_("use read() rather than mmap()"), NULL},
+        {"version", 'V', POPT_ARG_NONE, &ver, 0, N_("show version and exit"), NULL},
+        {"device" , 'd', POPT_ARG_STRING, &specifiedDevice, 0, N_("v4l device to use"), NULL},
+        //{"debug"  , 'D', POPT_ARG_NONE, &debugEnabled, 0, N_("enable debugging code"), NULL},
+        {"directory"  , 'D', POPT_ARG_STRING, &directory, 0, N_("the directory in which to place scanned items"), NULL},
+        {"width"  , 'x', POPT_ARG_INT, &x, 0, N_("capture width"), NULL},
+        {"height" , 'y', POPT_ARG_INT, &y, 0, N_("capture height"), NULL},
+        {"max"    , 'M', POPT_ARG_NONE, &max, 0, N_("maximum capture size"), NULL},
+        {"min"    , 'm', POPT_ARG_NONE, &min, 0, N_("minimum capture size"), NULL},
+        {"half"   , 'H', POPT_ARG_NONE, &half, 0, N_("middle capture size"), NULL},
+        {"read"   , 'R', POPT_ARG_NONE, &use_read, 0, N_("use read() rather than mmap()"), NULL},
         POPT_TABLEEND
     };
 
@@ -136,7 +130,7 @@ main(int argc, char *argv[]) {
     camorama_stock_init();
     //XXX: camorama_filters_init();
 
-    cam->debug = buggery;
+    cam->debug = debugEnabled;
 
 	cam->x = x;
 	cam->y = y;
@@ -159,15 +153,14 @@ main(int argc, char *argv[]) {
         cam->size = PICHALF;
     }
     if (use_read) {
-        printf ("gah!\n");
+        fprintf(stderr, "warning: must use_read for the image input? (gah!)\n");
         cam->read = TRUE;
     }
     gc = gconf_client_get_default ();
     cam->gc = gc;
 
     gconf_client_add_dir (cam->gc, CONFIG_PREFIX, GCONF_CLIENT_PRELOAD_NONE, NULL);
-    gconf_client_notify_add (cam->gc, KEY1, (void *) gconf_notify_func,
-                             cam->pixdir, NULL, NULL);
+    //XXX: gconf_client_notify_add (cam->gc, KEY1, (void *) gconf_notify_func, cam->pixdir, NULL, NULL);
     //XXX: gconf_client_notify_add (cam->gc, KEY5, (void *) gconf_notify_func, cam->rhost, NULL, NULL);
     //XXX: gconf_client_notify_add (cam->gc, KEY2, (void *) gconf_notify_func, cam->capturefile, NULL, NULL);
     gconf_client_notify_add (cam->gc, KEY3,
@@ -177,18 +170,31 @@ main(int argc, char *argv[]) {
                              (void *) gconf_notify_func_bool,
                              &cam->timestamp, NULL, NULL);
 
-    if (!poopoo) {
-	gchar const* gconf_device = gconf_client_get_string(cam->gc, KEY_DEVICE, NULL);
-	if(gconf_device) {
-		cam->video_dev = g_strdup(gconf_device);
-	} else {
+    if (specifiedDevice)
+    {
+		cam->video_dev = g_strdup (specifiedDevice);
+    }
+    else
+    {
 		cam->video_dev = g_strdup ("/dev/video0");
-	}
-    } else {
-        cam->video_dev = g_strdup (poopoo);
     }
 
-    cam->pixdir = g_strdup (gconf_client_get_string (cam->gc, KEY1, NULL));
+	//TODO: also accept directory via environment variable
+	if (directory)
+	{
+	    cam->pixdir = directory;
+	}
+	else
+	{
+	    const char *homeDir = getenv("HOME");
+
+	    //TODO: make this a ./configure parameter
+	    const char *defaultDir = "Documents/Scanned";
+
+	    const int n=strlen(defaultDir)+1+strlen(homeDir)+1;
+	    cam->pixdir = (gchar*)g_malloc(n);
+	    g_snprintf(cam->pixdir, n, "%s/%s", homeDir, defaultDir);
+	}
     //XXX: cam->capturefile = g_strdup (gconf_client_get_string (cam->gc, KEY2, NULL));
     /*
     cam->rhost = g_strdup (gconf_client_get_string (cam->gc, KEY5, NULL));
