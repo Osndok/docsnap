@@ -11,6 +11,7 @@
 #include <locale.h>
 #include <libv4l1.h>
 
+#include "camorama-window.h"
 #include "camorama-display.h"
 #include "camorama-stock-items.h"
 
@@ -133,7 +134,7 @@ main(int argc, char *argv[]) {
 
     /* gtk is initialized now */
     camorama_stock_init();
-    camorama_filters_init();
+    //XXX: camorama_filters_init();
 
     cam->debug = buggery;
 
@@ -164,11 +165,10 @@ main(int argc, char *argv[]) {
     gc = gconf_client_get_default ();
     cam->gc = gc;
 
-    gconf_client_add_dir (cam->gc, PATH, GCONF_CLIENT_PRELOAD_NONE, NULL);
+    gconf_client_add_dir (cam->gc, CONFIG_PREFIX, GCONF_CLIENT_PRELOAD_NONE, NULL);
     gconf_client_notify_add (cam->gc, KEY1, (void *) gconf_notify_func,
                              cam->pixdir, NULL, NULL);
-    gconf_client_notify_add (cam->gc, KEY5, (void *) gconf_notify_func,
-                             cam->rhost, NULL, NULL);
+    //XXX: gconf_client_notify_add (cam->gc, KEY5, (void *) gconf_notify_func, cam->rhost, NULL, NULL);
     gconf_client_notify_add (cam->gc, KEY2, (void *) gconf_notify_func,
                              cam->capturefile, NULL, NULL);
     gconf_client_notify_add (cam->gc, KEY3,
@@ -192,30 +192,32 @@ main(int argc, char *argv[]) {
     cam->pixdir = g_strdup (gconf_client_get_string (cam->gc, KEY1, NULL));
     cam->capturefile =
         g_strdup (gconf_client_get_string (cam->gc, KEY2, NULL));
+    /*
     cam->rhost = g_strdup (gconf_client_get_string (cam->gc, KEY5, NULL));
     cam->rlogin = g_strdup (gconf_client_get_string (cam->gc, KEY6, NULL));
     cam->rpw = g_strdup (gconf_client_get_string (cam->gc, KEY7, NULL));
     cam->rpixdir = g_strdup (gconf_client_get_string (cam->gc, KEY8, NULL));
     cam->rcapturefile =
         g_strdup (gconf_client_get_string (cam->gc, KEY9, NULL));
+    */
     cam->savetype = gconf_client_get_int (cam->gc, KEY3, NULL);
-    cam->rsavetype = gconf_client_get_int (cam->gc, KEY10, NULL);
+    //XXX: cam->rsavetype = gconf_client_get_int (cam->gc, KEY10, NULL);
     cam->ts_string =
         g_strdup (gconf_client_get_string (cam->gc, KEY16, NULL));
     cam->date_format = "%Y-%m-%d %H:%M:%S";
     cam->timestamp = gconf_client_get_bool (cam->gc, KEY4, NULL);
-    cam->rtimestamp = gconf_client_get_bool (cam->gc, KEY11, NULL);
+    //XXX: cam->rtimestamp = gconf_client_get_bool (cam->gc, KEY11, NULL);
 
-    cam->cap = gconf_client_get_bool (cam->gc, KEY12, NULL);
-    cam->rcap = gconf_client_get_bool (cam->gc, KEY13, NULL);
+    //XXX: cam->cap = gconf_client_get_bool (cam->gc, KEY12, NULL);
+    //XXX: cam->rcap = gconf_client_get_bool (cam->gc, KEY13, NULL);
     cam->timefn = gconf_client_get_bool (cam->gc, KEY14, NULL);
-    cam->rtimefn = gconf_client_get_bool (cam->gc, KEY15, NULL);
+    //XXX: cam->rtimefn = gconf_client_get_bool (cam->gc, KEY15, NULL);
     cam->usestring = gconf_client_get_bool (cam->gc, KEY18, NULL);
     cam->usedate = gconf_client_get_bool (cam->gc, KEY19, NULL);
-    cam->acap = gconf_client_get_bool (cam->gc, KEY20, NULL);
-    cam->timeout_interval = gconf_client_get_int (cam->gc, KEY21, NULL);
-    cam->show_adjustments = gconf_client_get_bool (cam->gc, KEY22, NULL);
-	 cam->show_effects = gconf_client_get_bool (cam->gc, KEY23, NULL);
+    //XXX: cam->acap = gconf_client_get_bool (cam->gc, KEY20, NULL);
+    //XXX: cam->timeout_interval = gconf_client_get_int (cam->gc, KEY21, NULL);
+    //XXX: cam->show_adjustments = gconf_client_get_bool (cam->gc, KEY22, NULL);
+	//XXX: cam->show_effects = gconf_client_get_bool (cam->gc, KEY23, NULL);
 
 
     /* get desktop depth */

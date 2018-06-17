@@ -11,3 +11,4 @@ Makefile
 /src/.deps
 /src/camorama
 /data/camorama.schemas
+*.bak

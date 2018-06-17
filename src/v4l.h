@@ -19,8 +19,6 @@
 #include <glade/glade.h>
 #include <gconf/gconf-client.h>
 
-#include "camorama-filter-chain.h"
-
 typedef enum {
 	PICMAX = 0,
 	PICMIN = 1,
@@ -53,23 +51,22 @@ typedef struct camera {
     gchar *capturefile, *rcapturefile;
     gchar *pixdir, *rpixdir;
     int savetype, rsavetype;
-    gchar *rhost, *rlogin, *rpw;
+    //XXX: gchar *rhost, *rlogin, *rpw;
     gchar *ts_string;
     gchar *date_format;
     gboolean debug, read, hidden;
-    gboolean cap, rcap, acap, show_adjustments, show_effects;
-    gboolean timestamp, rtimestamp, usedate, usestring;
-    gboolean rtimefn, timefn;
+    //XXX: gboolean cap, rcap, acap, show_adjustments, show_effects;
+    gboolean timestamp, usedate, usestring; //XXX: rtimestamp
+    gboolean timefn; //XXX: rtimefn
 	GdkPixmap *pixmap;
 	GtkWidget *da, *tray_tooltip, *status;
 	unsigned char *pic_buf, *tmp;
     guint timeout_id, idle_id;
-    guint32 timeout_interval;
+    //XXX: guint32 timeout_interval;
     GConfClient *gc;
     GladeXML *xml;
     GtkStatusIcon *tray_icon;
 
-    CamoramaFilterChain* filter_chain;
 } cam;
 
 void camera_cap (cam *);

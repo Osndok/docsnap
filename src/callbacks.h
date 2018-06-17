@@ -17,11 +17,11 @@ void gconf_notify_func_int (GConfClient * client, guint cnxn_id,
                             GConfEntry * entry, int val);
 int delete_event (GtkWidget *, gpointer data);
 void cap_func (GtkWidget *, cam *);
-void rcap_func (GtkWidget *, cam *);
-void acap_func (GtkWidget *, cam *);
-void set_sensitive (cam *);
+//XXX: void rcap_func (GtkWidget *, cam *);
+//XXX: void acap_func (GtkWidget *, cam *);
+void set_sensitive (cam *); //XXX: ???
 void tt_enable_func (GtkWidget *, cam *);
-void interval_change (GtkWidget *, cam *);
+//XXX: void interval_change (GtkWidget *, cam *);
 void ts_func (GtkWidget *, cam *);
 void customstring_func (GtkWidget *, cam *);
 void drawdate_func (GtkWidget *, cam *);
@@ -30,16 +30,16 @@ void rappend_func (GtkWidget *, cam *);
 void jpg_func (GtkWidget *, cam *);
 void png_func (GtkWidget *, cam *);
 void ppm_func (GtkWidget *, cam *);
-void rts_func (GtkWidget *, cam *);
-void rjpg_func (GtkWidget *, cam *);
-void rpng_func (GtkWidget *, cam *);
+//XXX: void rts_func (GtkWidget *, cam *);
+//XXX: void rjpg_func (GtkWidget *, cam *);
+//XXX: void rpng_func (GtkWidget *, cam *);
 gint (*pt2Function) (cam *);
 void rppm_func (GtkWidget *, cam *);
-void on_preferences1_activate (GtkMenuItem * menuitem, gpointer user_data);
+//XXX: void on_preferences1_activate (GtkMenuItem * menuitem, gpointer user_data);
 void on_about_activate (GtkMenuItem * menuitem, cam *cam);
-void on_show_adjustments_activate (GtkMenuItem * menuitem, cam *);
-void on_show_effects_activate (GtkMenuItem * menuitem, cam *);
-void prefs_func (GtkWidget *, cam *);
+//XXX: void on_show_adjustments_activate (GtkMenuItem * menuitem, cam *);
+//XXX: void on_show_effects_activate (GtkMenuItem * menuitem, cam *);
+//XXX: void prefs_func (GtkWidget *, cam *);
 gint io_func (cam *, gint, GdkInputCondition);
 void capture_func2 (GtkWidget *, cam *);
 void capture_func (GtkWidget *, cam *);
@@ -66,7 +66,7 @@ void colour_change (GtkHScale *, cam *);
 void hue_change (GtkHScale *, cam *);
 void wb_change (GtkHScale *, cam *);
 gboolean on_drawingarea_expose_event (GtkWidget *, GdkEventExpose *, cam *);
-void update_tooltip (cam * cam);
+//XXX: void update_tooltip (cam * cam);
 
 G_END_DECLS
 

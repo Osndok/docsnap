@@ -3,7 +3,6 @@
 #include "callbacks.h"
 #include "interface.h"
 #include "support.h"
-#include "filter.h"
 #include <gnome.h>
 #include <libgnomeui/gnome-about.h>
 #include <libgnomeui/gnome-propertybox.h>
@@ -65,15 +64,7 @@ void append_func (GtkWidget * rb, cam * cam)
 
 }
 
-void rappend_func (GtkWidget * rb, cam * cam)
-{
-    GConfClient *client;
-
-    client = gconf_client_get_default ();
-    cam->rtimefn = gtk_toggle_button_get_active ((GtkToggleButton *) rb);
-    gconf_client_set_bool (cam->gc, KEY15, cam->rtimefn, NULL);
-
-}
+//XXX: void rappend_func (GtkWidget * rb, cam * cam);
 
 void jpg_func (GtkWidget * rb, cam * cam)
 {
@@ -105,30 +96,8 @@ void ppm_func (GtkWidget * rb, cam * cam)
 
 void set_sensitive (cam * cam)
 {
-    gtk_widget_set_sensitive (glade_xml_get_widget (cam->xml, "table4"),
-                              cam->cap);
-
-    gtk_widget_set_sensitive (glade_xml_get_widget
-                              (cam->xml, "appendbutton"), cam->cap);
-    gtk_widget_set_sensitive (glade_xml_get_widget (cam->xml, "tsbutton"),
-                              cam->cap);
-    gtk_widget_set_sensitive (glade_xml_get_widget (cam->xml, "jpgb"),
-                              cam->cap);
-    gtk_widget_set_sensitive (glade_xml_get_widget (cam->xml, "pngb"),
-                              cam->cap);
-    gtk_widget_set_sensitive (glade_xml_get_widget (cam->xml, "table5"),
-                              cam->rcap);
-    gtk_widget_set_sensitive (glade_xml_get_widget (cam->xml, "timecb"),
-                              cam->rcap);
-    gtk_widget_set_sensitive (glade_xml_get_widget
-                              (cam->xml, "tsbutton2"), cam->rcap);
-    gtk_widget_set_sensitive (glade_xml_get_widget (cam->xml, "fjpgb"),
-                              cam->rcap);
-    gtk_widget_set_sensitive (glade_xml_get_widget (cam->xml, "fpngb"),
-                              cam->rcap);
-    gtk_widget_set_sensitive (glade_xml_get_widget (cam->xml, "hbox20"),
-                              cam->acap);
-
+    //no-op?
+    //TODO: remove this function? we no longer have any gui elements to toggle on/off
 }
 
 void cap_func (GtkWidget * rb, cam * cam)
@@ -136,117 +105,20 @@ void cap_func (GtkWidget * rb, cam * cam)
     GConfClient *client;
 
     client = gconf_client_get_default ();
-    cam->cap = gtk_toggle_button_get_active ((GtkToggleButton *) rb);
-
-    gconf_client_set_bool (cam->gc, KEY12, cam->cap, NULL);
-    update_tooltip (cam);
+    //cam->cap = gtk_toggle_button_get_active ((GtkToggleButton *) rb);
+    //gconf_client_set_bool (cam->gc, KEY12, cam->cap, NULL);
+    //XXX: update_tooltip (cam);
     set_sensitive (cam);
 
 }
 
-void rcap_func (GtkWidget * rb, cam * cam)
-{
-    GConfClient *client;
-
-    client = gconf_client_get_default ();
-    cam->rcap = gtk_toggle_button_get_active ((GtkToggleButton *) rb);
-    gconf_client_set_bool (cam->gc, KEY13, cam->rcap, NULL);
-    update_tooltip (cam);
-    set_sensitive (cam);
-
-}
-
-void acap_func (GtkWidget * rb, cam * cam)
-{
-    GConfClient *client;
-
-    client = gconf_client_get_default ();
-    cam->acap = gtk_toggle_button_get_active ((GtkToggleButton *) rb);
-
-    gconf_client_set_bool (cam->gc, KEY20, cam->acap, NULL);
-
-    if (cam->acap == TRUE) {
-        cam->timeout_id =
-            gtk_timeout_add (cam->timeout_interval,
-                             (GSourceFunc) timeout_capture_func, cam);
-        if (cam->debug == TRUE) {
-            printf ("add autocap - %d -  timeout_interval = \n",
-                    cam->timeout_id, cam->timeout_interval);
-        }
-    } else {
-        if (cam->debug == TRUE) {
-            printf ("remove autocap - %d -  timeout_interval = \n",
-                    cam->timeout_id, cam->timeout_interval);
-        }
-        gtk_timeout_remove (cam->timeout_id);
-    }
-    update_tooltip (cam);
-    set_sensitive (cam);
-}
-
-void interval_change (GtkWidget * sb, cam * cam)
-{
-    GConfClient *client;
-
-    client = gconf_client_get_default ();
-    cam->timeout_interval =
-        gtk_spin_button_get_value ((GtkSpinButton *) sb) * 60000;
-    gconf_client_set_int (cam->gc, KEY21, cam->timeout_interval, NULL);
-    if (cam->acap == TRUE) {
-        if (cam->debug == TRUE) {
-            printf
-                ("interval_change; old timeout_id = %d old interval = %d\n",
-                 cam->timeout_id, cam->timeout_interval);
-        }
-        gtk_timeout_remove (cam->timeout_id);
-        cam->timeout_id =
-            gtk_timeout_add (cam->timeout_interval,
-                             (GSourceFunc) timeout_capture_func, cam);
-        if (cam->debug == TRUE) {
-            printf ("new timeout_id = %d, new interval = %d\n",
-                    cam->timeout_id, cam->timeout_interval);
-        }
-    }
-    update_tooltip (cam);
-}
-
-void rjpg_func (GtkWidget * rb, cam * cam)
-{
-    GConfClient *client;
-
-    client = gconf_client_get_default ();
-    cam->rsavetype = JPEG;
-    gconf_client_set_int (cam->gc, KEY10, cam->rsavetype, NULL);
-
-}
-
-void rpng_func (GtkWidget * rb, cam * cam)
-{
-    GConfClient *client;
-
-    client = gconf_client_get_default ();
-    cam->rsavetype = PNG;
-    gconf_client_set_int (cam->gc, KEY10, cam->rsavetype, NULL);
-}
-
-void rppm_func (GtkWidget * rb, cam * cam)
-{
-    GConfClient *client;
-
-    client = gconf_client_get_default ();
-    cam->rsavetype = PPM;
-    gconf_client_set_int (cam->gc, KEY10, cam->rsavetype, NULL);
-}
-
-void rts_func (GtkWidget * rb, cam * cam)
-{
-    GConfClient *client;
-
-    client = gconf_client_get_default ();
-    cam->rtimestamp = gtk_toggle_button_get_active ((GtkToggleButton *) rb);
-    gconf_client_set_bool (cam->gc, KEY11, cam->rtimestamp, NULL);
-
-}
+//XXX: void rcap_func (GtkWidget * rb, cam * cam);
+//XXX: void acap_func (GtkWidget * rb, cam * cam);
+//XXX: void interval_change (GtkWidget * sb, cam * cam);
+//XXX: void rjpg_func (GtkWidget * rb, cam * cam);
+//XXX: void rpng_func (GtkWidget * rb, cam * cam);
+//XXX: void rppm_func (GtkWidget * rb, cam * cam);
+//XXX: void rts_func (GtkWidget * rb, cam * cam);
 
 void
 gconf_notify_func (GConfClient * client, guint cnxn_id, GConfEntry * entry,
@@ -279,87 +151,21 @@ gconf_notify_func_int (GConfClient * client, guint cnxn_id,
 
 }
 
+//TODO: RENAME THIS... maybe: quit_callback_shunt ?
 int delete_event (GtkWidget * widget, gpointer data)
 {
     gtk_main_quit ();
     return FALSE;
 }
 
-/*
- * apply preferences 
- */
-void prefs_func (GtkWidget * okbutton, cam * cam)
-{
-    GConfClient *client;
-
-    client = gconf_client_get_default ();
-
-    if (gnome_file_entry_get_full_path ((GnomeFileEntry *) dentry, TRUE)
-        != NULL) {
-        cam->pixdir = g_strdup ((gchar *)
-                                gnome_file_entry_get_full_path ((GnomeFileEntry *) dentry, FALSE));
-        gconf_client_set_string (cam->gc, KEY1, cam->pixdir, NULL);
-
-    } else {
-        if (cam->debug == TRUE) {
-            fprintf (stderr, "null directory\ndirectory unchanged.");
-        }
-    }
-
-    /*
-     * this is stupid, even if the string is empty, it will not return NULL 
-     */
-    if (strlen (gtk_entry_get_text ((GtkEntry *) entry2)) > 0) {
-        cam->capturefile =
-            g_strdup (gtk_entry_get_text ((GtkEntry *) entry2));
-        gconf_client_set_string (cam->gc, KEY2, cam->capturefile, NULL);
-    }
-
-    if (strlen (gtk_entry_get_text ((GtkEntry *) host_entry)) > 0) {
-        cam->rhost = g_strdup (gtk_entry_get_text ((GtkEntry *) host_entry));
-        gconf_client_set_string (cam->gc, KEY5, cam->rhost, NULL);
-    }
-    if (strlen (gtk_entry_get_text ((GtkEntry *) login_entry)) > 0) {
-        cam->rlogin =
-            g_strdup (gtk_entry_get_text ((GtkEntry *) login_entry));
-        gconf_client_set_string (cam->gc, KEY6, cam->rlogin, NULL);
-    }
-    if (strlen (gtk_entry_get_text ((GtkEntry *) pw_entry)) > 0) {
-        cam->rpw = g_strdup (gtk_entry_get_text ((GtkEntry *) pw_entry));
-        gconf_client_set_string (cam->gc, KEY7, cam->rpw, NULL);
-    }
-    if (strlen (gtk_entry_get_text ((GtkEntry *) directory_entry)) > 0) {
-        cam->rpixdir =
-            g_strdup (gtk_entry_get_text ((GtkEntry *) directory_entry));
-        gconf_client_set_string (cam->gc, KEY8, cam->rpixdir, NULL);
-    }
-    if (strlen (gtk_entry_get_text ((GtkEntry *) filename_entry)) > 0) {
-        cam->rcapturefile =
-            g_strdup (gtk_entry_get_text ((GtkEntry *) filename_entry));
-        gconf_client_set_string (cam->gc, KEY9, cam->rcapturefile, NULL);
-    }
-    if (strlen (gtk_entry_get_text ((GtkEntry *) string_entry)) > 0) {
-        cam->ts_string =
-            g_strdup (gtk_entry_get_text ((GtkEntry *) string_entry));
-        gconf_client_set_string (cam->gc, KEY16, cam->ts_string, NULL);
-    }
-    if (cam->debug == TRUE) {
-        fprintf (stderr, "dir now = %s\nfile now = %s\n", cam->pixdir,
-                 cam->capturefile);
-    }
-    gtk_widget_hide (prefswindow);
-
-}
+//XXX: void prefs_func (GtkWidget * okbutton, cam * cam)
 
 void on_quit_activate (GtkMenuItem * menuitem, gpointer user_data)
 {
     gtk_main_quit ();
 }
 
-void on_preferences1_activate (GtkMenuItem * menuitem, gpointer user_data)
-{
-    gtk_widget_show (prefswindow);
-}
+//XXX: void on_preferences1_activate (GtkMenuItem * menuitem, gpointer user_data);
 
 void on_change_size_activate (GtkWidget * widget, cam * cam)
 {
@@ -442,7 +248,7 @@ void on_change_size_activate (GtkWidget * widget, cam * cam)
 
     cam->pixmap = gdk_pixmap_new (NULL, cam->x, cam->y, cam->desk_depth);
 
-	//gtk_widget_set_size_request (glade_xml_get_widget (cam->xml, "da"), cam->x, cam->y);
+	gtk_widget_set_size_request (glade_xml_get_widget (cam->xml, "viewfinder"), cam->x, cam->y);
 
     frame = 0;
 	
@@ -460,37 +266,8 @@ void on_change_size_activate (GtkWidget * widget, cam * cam)
     g_free (title);
 }
 
-void on_show_adjustments_activate (GtkMenuItem * menuitem, cam * cam)
-{
-
-    if (GTK_WIDGET_VISIBLE (glade_xml_get_widget (cam->xml, "adjustments_table"))) {
-        gtk_widget_hide (glade_xml_get_widget (cam->xml, "adjustments_table"));
-        gtk_window_resize (GTK_WINDOW
-                           (glade_xml_get_widget
-                            (cam->xml, "main_window")), 320, 240);
-        cam->show_adjustments = FALSE;
-
-    } else {
-        gtk_widget_show (glade_xml_get_widget (cam->xml, "adjustments_table"));
-        cam->show_adjustments = TRUE;
-    }
-    gconf_client_set_bool (cam->gc, KEY22, cam->show_adjustments, NULL);
-}
-
-void
-on_show_effects_activate(GtkMenuItem* menuitem, cam* cam) {
-	GtkWidget* effects = glade_xml_get_widget(cam->xml, "scrolledwindow_effects");
-	cam->show_effects = gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(menuitem));
-	
-	if(!cam->show_effects) {
-		gtk_widget_hide(effects);
-		gtk_window_resize(GTK_WINDOW(glade_xml_get_widget(cam->xml, "main_window")), 320, 240);
-	} else {
-		gtk_widget_show(effects);
-	}
-
-	gconf_client_set_bool(cam->gc, KEY23, cam->show_effects, NULL);
-}
+//XXX: void on_show_adjustments_activate (GtkMenuItem * menuitem, cam * cam);
+//XXX: void on_show_effects_activate(GtkMenuItem* menuitem, cam* cam);
 
 void on_about_activate (GtkMenuItem * menuitem, cam * cam)
 {
@@ -529,19 +306,7 @@ void on_about_activate (GtkMenuItem * menuitem, cam * cam)
 void
 camorama_filter_color_filter(void* filter, guchar *image, int x, int y, int depth);
 
-static void
-apply_filters(cam* cam) {
-	/* v4l has reverse rgb order from what camora expect so call the color
-	   filter to fix things up before running the user selected filters */
-	camorama_filter_color_filter(NULL, cam->pic_buf, cam->x, cam->y, cam->depth);
-	camorama_filter_chain_apply(cam->filter_chain, cam->pic_buf, cam->x, cam->y, cam->depth);
-#warning "FIXME: enable the threshold channel filter"
-//	if((effect_mask & CAMORAMA_FILTER_THRESHOLD_CHANNEL)  != 0) 
-//		threshold_channel (cam->pic_buf, cam->x, cam->y, cam->dither);
-#warning "FIXME: enable the threshold filter"
-//	if((effect_mask & CAMORAMA_FILTER_THRESHOLD)  != 0) 
-//		threshold (cam->pic_buf, cam->x, cam->y, cam->dither);
-}
+//XXX: apply_filters(cam* cam);
 
 /*
  * Not called on my system... perhaps some cameras (or kernels?) require the direct read() logic, 
@@ -566,12 +331,14 @@ read_timeout_func(cam* cam) {
      */
     cam->pic_buf = cam->pic;    // + cam->vid_buf.offsets[frame];
 
+	/* WAS PART OF THE KERNED-OUT FILTERS FILE
     if (cam->vid_pic.palette == VIDEO_PALETTE_YUV420P) {
         yuv420p_to_rgb (cam->pic_buf, cam->tmp, cam->x, cam->y, cam->depth);
         cam->pic_buf = cam->tmp;
     }
+    */
 
-	apply_filters(cam);
+	//XXX: apply_filters(cam);
 
     gc = gdk_gc_new (cam->pixmap);
     gdk_draw_rgb_image (cam->pixmap,
@@ -580,8 +347,7 @@ read_timeout_func(cam* cam) {
                         GDK_RGB_DITHER_NORMAL, cam->pic_buf,
                         cam->vid_win.width * cam->depth);
 
-    gtk_widget_queue_draw_area (glade_xml_get_widget (cam->xml, "da"), 0,
-                                0, cam->x, cam->y);
+    gtk_widget_queue_draw_area (glade_xml_get_widget (cam->xml, "viewfinder"), 0, 0, cam->x, cam->y);
     return 1;
 
 }
@@ -620,13 +386,15 @@ gint timeout_func (cam * cam)
      */
     cam->pic_buf = cam->pic + cam->vid_buf.offsets[frame];
 
+	/* WAS PART OF THE KERNED-OUT FILTERS FILE
     if (cam->vid_pic.palette == VIDEO_PALETTE_YUV420P)
 	{
         yuv420p_to_rgb (cam->pic_buf, cam->tmp, cam->x, cam->y, cam->depth);
         cam->pic_buf = cam->tmp;
     }
+    */
 
-	apply_filters(cam);
+	//XXX: apply_filters(cam);
 
 	//int bytesPerFrame=(cam->x * cam->y * cam->depth);
 
@@ -644,8 +412,7 @@ gint timeout_func (cam * cam)
                         GDK_RGB_DITHER_NORMAL, cam->pic_buf,
                         cam->vid_win.width * cam->depth);
 
-    gtk_widget_queue_draw_area (glade_xml_get_widget (cam->xml, "da"), 0,
-                                0, cam->x, cam->y);
+    gtk_widget_queue_draw_area (glade_xml_get_widget (cam->xml, "viewfinder"), 0, 0, cam->x, cam->y);
 
     cam->vid_map.frame = frame;
 
@@ -683,11 +450,12 @@ gint fps (GtkWidget * sb)
     gchar *stat;
 
     seconds++;
+    //NB: the 2 magic number comes from the fact that this callback is called every 2 seconds.
     stat = g_strdup_printf ("%.2f fps - current     %.2f fps - average",
                             (float) frames / (float) (2),
                             (float) frames2 / (float) (seconds * 2));
     frames = 0;
-    gnome_appbar_push (GNOME_APPBAR (sb), stat);
+    //TODO: FIXME: gnome_appbar_push (GNOME_APPBAR (sb), stat);
     g_free (stat);
     return 1;
 }
@@ -832,12 +600,7 @@ void capture_func (GtkWidget * widget, cam * cam)
 		memcpy (cam->tmp, cam->pic_buf, cam->x * cam->y * cam->depth);
 	}
 
-    if (cam->rcap == TRUE) {
-        remote_save (cam);
-    }
-    if (cam->cap == TRUE) {
-        local_save (cam);
-    }
+    local_save (cam);
 
 }
 
@@ -860,13 +623,8 @@ gint timeout_capture_func (cam * cam)
 
     }
     memcpy (cam->tmp, cam->pic_buf, cam->x * cam->y * cam->depth);
+	local_save (cam);
 
-    if (cam->cap == TRUE) {
-        local_save (cam);
-    }
-    if (cam->rcap == TRUE) {
-        remote_save (cam);
-    }
     return 1;
 }
 
@@ -921,36 +679,5 @@ void help_cb (GtkWidget * widget, gpointer data)
     }
 }
 
-void update_tooltip (cam * cam)
-{
-    gchar *tooltip_text;
+//XXX: void update_tooltip (cam * cam);
 
-    if (cam->debug == TRUE)
-	{
-        fprintf(stderr, "update_tooltip called\n");
-    }
-
-    if (cam->acap == TRUE)
-	{
-        tooltip_text =
-            g_strdup_printf
-            (_("Local Capture: %d\nRemote Capture: %d\nCapture Interval: %d"),
-             cam->cap, cam->rcap, cam->timeout_interval / 60000);
-
-		if (cam->debug == TRUE)
-		{
-            fprintf(stderr, "tip - acap on\n");
-        }
-    }
-    else
-	{
-        if (cam->debug == TRUE)
-		{
-            fprintf(stderr, "tip - acap off\n");
-        }
-
-        tooltip_text = g_strdup_printf (_("Automatic Capture Disabled"));
-    }
-    gtk_status_icon_set_tooltip(cam->tray_icon, tooltip_text);
-    g_free (tooltip_text);
-}
