@@ -183,7 +183,7 @@ main(int argc, char *argv[]) {
 	if(gconf_device) {
 		cam->video_dev = g_strdup(gconf_device);
 	} else {
-		cam->video_dev = g_strdup ("/dev/video1");
+		cam->video_dev = g_strdup ("/dev/video0");
 	}
     } else {
         cam->video_dev = g_strdup (poopoo);
