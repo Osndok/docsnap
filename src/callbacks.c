@@ -727,90 +727,58 @@ void init_cam (GtkWidget * capture, cam * cam)
     frame = 0;
 }
 
-void basicThreeByteMedianOfThreePixelMerge(char *a, char *b, char *c, char *out)
+
+//NB: Assumes UNSIGNED char...
+char basicThreeByteMedia(char a2, char b2, char c2)
 {
-	//V4L1 buffers are presumed to be little endian, platform is assumed to be big endian.
-	//TODO: there must be some way to validate this... this looks very untested and error prone.
-	/*
-	int a2=(*a);
-	{
-		a2<<=8;
-		a2|=(*(a+1));
-		a2<<=8;
-		a2|=(*(a+2));
-	}
-
-	int b2=(*b);
-	{
-		b2<<=8;
-		b2|=(*(b+1));
-		b2<<=8;
-		b2|=(*(b+2));
-	}
-	
-	int c2=(*c);
-	{
-		c2<<=8;
-		c2|=(*(c+1));
-		c2<<=8;
-		c2|=(*(c+2));
-	}
-	*/
-	int a2=( *(a+2)<<16 | *(a+1)<<8 | *a);
-	int b2=( *(b+2)<<16 | *(b+1)<<8 | *b);
-	int c2=( *(c+2)<<16 | *(c+1)<<8 | *c);
-
-	//There are six possible permutations....
+	//Since equality can be ignored, there are six possible permutations....
 	if (a2<b2)
 	{
 		if (c2<a2)
 		{
 			//C A B
-			*(out)=*(a);
-			*(out+1)=*(a+1);
-			*(out+2)=*(a+2);
+			return a2;
 		}
 		else
 		if (b2<c2)
 		{
 			//A B C
-			*(out)=*(b);
-			*(out+1)=*(b+1);
-			*(out+2)=*(b+2);
+			return b2;
 		}
 		else
 		{
 			//A C B
-			*(out)=*(c);
-			*(out+1)=*(c+1);
-			*(out+2)=*(c+2);
+			return c2;
 		}
 	}
 	else
 	{
+		//b2 < a2 (effectively)
+
 		if (c2<b2)
 		{
 			//C B A
-			*(out)=*(b);
-			*(out+1)=*(b+1);
-			*(out+2)=*(b+2);
+			return b2;
 		}
 		else
 		if (a2<c2)
 		{
 			//B A C
-			*(out)=*(a);
-			*(out+1)=*(a+1);
-			*(out+2)=*(a+2);
+			return a2;
 		}
 		else
 		{
 			//B C A
-			*(out)=*(c);
-			*(out+1)=*(c+1);
-			*(out+2)=*(c+2);
+			return c2;
 		}
 	}
+}
+
+void basicThreeByteMedianOfThreePixelMerge(char *a, char *b, char *c, char *out)
+{
+	*(out)=basicThreeByteMedia(*a, *b, *c);
+	*(out+1)=basicThreeByteMedia(*(a+1), *(b+1), *(c+1));
+	*(out+2)=basicThreeByteMedia(*(a+2), *(b+2), *(c+2));
 }
 
 void capture_func (GtkWidget * widget, cam * cam)
