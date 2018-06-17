@@ -54,16 +54,7 @@ void drawdate_func (GtkWidget * rb, cam * cam)
     gconf_client_set_bool (cam->gc, KEY19, cam->usedate, NULL);
 }
 
-void append_func (GtkWidget * rb, cam * cam)
-{
-    GConfClient *client;
-
-    client = gconf_client_get_default ();
-    cam->timefn = gtk_toggle_button_get_active ((GtkToggleButton *) rb);
-    gconf_client_set_bool (cam->gc, KEY14, cam->timefn, NULL);
-
-}
-
+//XXX: void append_func (GtkWidget * rb, cam * cam)
 //XXX: void rappend_func (GtkWidget * rb, cam * cam);
 
 void jpg_func (GtkWidget * rb, cam * cam)
@@ -163,6 +154,27 @@ int delete_event (GtkWidget * widget, gpointer data)
 void on_quit_activate (GtkMenuItem * menuitem, gpointer user_data)
 {
     gtk_main_quit ();
+}
+
+void on_key_press(GtkWidget *mainWindow, GdkEventKey *event, cam* cam)
+{
+    if (event->keyval == GDK_BackSpace)
+    {
+        fprintf(stderr, "TODO: remove last image: %s\n", "unknown.png");
+        return;
+    }
+
+    gchar* name=gdk_keyval_name(event->keyval);
+
+    if (strlen(name) == 1)
+    {
+		//fprintf(stderr, "trigger: %s (%d)\n", name, event->keyval);
+		capture_func(NULL, cam, name);
+    }
+    else
+    {
+		fprintf(stderr, "key-press: %s (%d)\n", name, event->keyval);
+    }
 }
 
 //XXX: void on_preferences1_activate (GtkMenuItem * menuitem, gpointer user_data);
@@ -353,7 +365,8 @@ read_timeout_func(cam* cam) {
 }
 
 /*
- * get image from cam - does all the work :-) 
+ * This is our idle function.
+ * It copies image data (frames) from the camera to our viewfinder.
  */
 gint timeout_func (cam * cam)
 {
@@ -400,7 +413,7 @@ gint timeout_func (cam * cam)
 
 	if (offThreadCaptureTrigger)
 	{
-		capture_func(NULL, cam);
+		capture_func(NULL, cam, "SIGNAL");
 		offThreadCaptureTrigger=0;
 	}
 
@@ -549,7 +562,7 @@ void basicThreeByteMedianOfThreePixelMerge(char *a, char *b, char *c, char *out)
 	*(out+2)=basicThreeByteMedia(*(a+2), *(b+2), *(c+2));
 }
 
-void capture_func (GtkWidget * widget, cam * cam)
+void capture_func (GtkWidget* widget, cam* cam, gchar* keyqualifier)
 {
     if (cam->debug == TRUE)
 	{
@@ -600,71 +613,14 @@ void capture_func (GtkWidget * widget, cam * cam)
 		memcpy (cam->tmp, cam->pic_buf, cam->x * cam->y * cam->depth);
 	}
 
-    local_save (cam);
-
+    local_save(cam, keyqualifier);
 }
 
-gint timeout_capture_func (cam * cam)
-{
-    /* GdkRectangle rect;
-     * rect->x = 0; rect->y = 0;
-     * rect->width = cam->x; rect->height = cam->y; */
-
-    /* need to return true, or the timeout will be destroyed - don't forget! :) */
-    if (cam->hidden == TRUE) {
-        /* call timeout_func to get a new picture.   stupid, but it works.
-         * also need to add this to capture_func 
-         * maybe add a "window_state_event" handler to do the same when window is iconified */
-
-        pt2Function (cam);
-        pt2Function (cam);
-        pt2Function (cam);
-        pt2Function (cam);
-
-    }
-    memcpy (cam->tmp, cam->pic_buf, cam->x * cam->y * cam->depth);
-	local_save (cam);
-
-    return 1;
-}
-
-void contrast_change (GtkHScale * sc1, cam * cam)
-{
-
-    cam->vid_pic.contrast =
-        256 * (int) gtk_range_get_value ((GtkRange *) sc1);
-    set_pic_info (cam);
-}
-
-void brightness_change (GtkHScale * sc1, cam * cam)
-{
-
-    cam->vid_pic.brightness =
-        256 * (int) gtk_range_get_value ((GtkRange *) sc1);
-    set_pic_info (cam);
-}
-
-void colour_change (GtkHScale * sc1, cam * cam)
-{
-
-    cam->vid_pic.colour = 256 * (int) gtk_range_get_value ((GtkRange *) sc1);
-    set_pic_info (cam);
-}
-
-void hue_change (GtkHScale * sc1, cam * cam)
-{
-
-    cam->vid_pic.hue = 256 * (int) gtk_range_get_value ((GtkRange *) sc1);
-    set_pic_info (cam);
-}
-
-void wb_change (GtkHScale * sc1, cam * cam)
-{
-
-    cam->vid_pic.whiteness =
-        256 * (int) gtk_range_get_value ((GtkRange *) sc1);
-    set_pic_info (cam);
-}
+//XXX: void contrast_change (GtkHScale * sc1, cam * cam)
+//XXX: void brightness_change (GtkHScale * sc1, cam * cam)
+//XXX: void colour_change (GtkHScale * sc1, cam * cam)
+//XXX: void hue_change (GtkHScale * sc1, cam * cam)
+//XXX: void wb_change (GtkHScale * sc1, cam * cam)
 
 void help_cb (GtkWidget * widget, gpointer data)
 {

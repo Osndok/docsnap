@@ -88,6 +88,7 @@ glade_xml_signal_connect_data (cam->xml, "on_status_show",
     */
 
     //XXX: g_signal_connect (cam->tray_icon, "popup-menu", G_CALLBACK (tray_clicked_callback), cam);
+    g_signal_connect(G_OBJECT(mainWindow), "key_press_event", G_CALLBACK(on_key_press), cam);
 
     /* connect the signals in the interface 
      * glade_xml_signal_autoconnect(xml);

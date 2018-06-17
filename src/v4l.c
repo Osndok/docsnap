@@ -16,7 +16,8 @@ void print_cam(cam *cam){
 	printf("-------------\n");
 	printf("device = %s, x = %d, y = %d\n",cam->video_dev, cam->x,cam->y);
 	printf("depth = %d, desk_depth = %d, size = %d\n",cam->depth,cam->desk_depth,cam->size);
-	printf("capture directory = %s, capture file = %s\n",cam->pixdir, cam->capturefile);
+	printf("capture directory = %s\n",cam->pixdir);
+	//XXX: printf("capture file = %s\n", cam->capturefile);
 	//XXX: printf("remote capture directory = %s, remote capture file = %s\n",cam->rpixdir, cam->rcapturefile);
 	//XXX: printf("remote host = %s, remote login = %s\n",cam->rhost,cam->rlogin);
 	printf("timestamp = %s\n\n",cam->ts_string);

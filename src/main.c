@@ -169,8 +169,7 @@ main(int argc, char *argv[]) {
     gconf_client_notify_add (cam->gc, KEY1, (void *) gconf_notify_func,
                              cam->pixdir, NULL, NULL);
     //XXX: gconf_client_notify_add (cam->gc, KEY5, (void *) gconf_notify_func, cam->rhost, NULL, NULL);
-    gconf_client_notify_add (cam->gc, KEY2, (void *) gconf_notify_func,
-                             cam->capturefile, NULL, NULL);
+    //XXX: gconf_client_notify_add (cam->gc, KEY2, (void *) gconf_notify_func, cam->capturefile, NULL, NULL);
     gconf_client_notify_add (cam->gc, KEY3,
                              (void *) gconf_notify_func_int,
                              GINT_TO_POINTER (cam->savetype), NULL, NULL);
@@ -190,8 +189,7 @@ main(int argc, char *argv[]) {
     }
 
     cam->pixdir = g_strdup (gconf_client_get_string (cam->gc, KEY1, NULL));
-    cam->capturefile =
-        g_strdup (gconf_client_get_string (cam->gc, KEY2, NULL));
+    //XXX: cam->capturefile = g_strdup (gconf_client_get_string (cam->gc, KEY2, NULL));
     /*
     cam->rhost = g_strdup (gconf_client_get_string (cam->gc, KEY5, NULL));
     cam->rlogin = g_strdup (gconf_client_get_string (cam->gc, KEY6, NULL));
@@ -210,7 +208,7 @@ main(int argc, char *argv[]) {
 
     //XXX: cam->cap = gconf_client_get_bool (cam->gc, KEY12, NULL);
     //XXX: cam->rcap = gconf_client_get_bool (cam->gc, KEY13, NULL);
-    cam->timefn = gconf_client_get_bool (cam->gc, KEY14, NULL);
+    //XXX: cam->timefn = gconf_client_get_bool (cam->gc, KEY14, NULL);
     //XXX: cam->rtimefn = gconf_client_get_bool (cam->gc, KEY15, NULL);
     cam->usestring = gconf_client_get_bool (cam->gc, KEY18, NULL);
     cam->usedate = gconf_client_get_bool (cam->gc, KEY19, NULL);
@@ -245,11 +243,13 @@ main(int argc, char *argv[]) {
     /* get picture attributes */
     get_pic_info (cam);
     set_pic_info (cam);
+    /*
     cam->contrast = cam->vid_pic.contrast;
     cam->brightness = cam->vid_pic.brightness;
     cam->colour = cam->vid_pic.colour;
     cam->hue = cam->vid_pic.hue;
     cam->wb = cam->vid_pic.whiteness;
+    */
     cam->depth = cam->vid_pic.depth / 8;
     cam->pic_buf = malloc (cam->x * cam->y * cam->depth);
     cam->tmp =

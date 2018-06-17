@@ -4,7 +4,7 @@
 //XXX: int add_rgb_text (guchar *, int, int, char *, char *, gboolean, gboolean);
 //XXX: void remote_save (cam *);
 //XXX: void save_thread (cam *);
-int local_save (cam *);
+int local_save (cam *, gchar* keyqualifier);
 
 /*
  * To trigger an image capture on the main thread from any thread (such as the signal handler

@@ -38,7 +38,7 @@ typedef struct camera {
     int depth;
     int desk_depth;
     CamoImageSize size;
-    int contrast, brightness, colour, hue, wb;
+    //XXX: int contrast, brightness, colour, hue, wb;
     int frame_number;
     struct video_capability vid_cap;
     struct video_picture vid_pic;
@@ -48,8 +48,8 @@ typedef struct camera {
     char *video_dev;
     unsigned char *pic;
     unsigned char *image;
-    gchar *capturefile, *rcapturefile;
-    gchar *pixdir, *rpixdir;
+    //XXX: gchar *capturefile, *rcapturefile;
+    gchar *pixdir; //XXX: , *rpixdir;
     int savetype, rsavetype;
     //XXX: gchar *rhost, *rlogin, *rpw;
     gchar *ts_string;
@@ -57,7 +57,7 @@ typedef struct camera {
     gboolean debug, read, hidden;
     //XXX: gboolean cap, rcap, acap, show_adjustments, show_effects;
     gboolean timestamp, usedate, usestring; //XXX: rtimestamp
-    gboolean timefn; //XXX: rtimefn
+    //XXX: gboolean timefn, rtimefn
 	GdkPixmap *pixmap;
 	GtkWidget *da, *tray_tooltip, *status;
 	unsigned char *pic_buf, *tmp;

@@ -25,8 +25,8 @@ void tt_enable_func (GtkWidget *, cam *);
 void ts_func (GtkWidget *, cam *);
 void customstring_func (GtkWidget *, cam *);
 void drawdate_func (GtkWidget *, cam *);
-void append_func (GtkWidget *, cam *);
-void rappend_func (GtkWidget *, cam *);
+//XXX: void append_func (GtkWidget *, cam *);
+//XXX: void rappend_func (GtkWidget *, cam *);
 void jpg_func (GtkWidget *, cam *);
 void png_func (GtkWidget *, cam *);
 void ppm_func (GtkWidget *, cam *);
@@ -41,10 +41,10 @@ void on_about_activate (GtkMenuItem * menuitem, cam *cam);
 //XXX: void on_show_effects_activate (GtkMenuItem * menuitem, cam *);
 //XXX: void prefs_func (GtkWidget *, cam *);
 gint io_func (cam *, gint, GdkInputCondition);
-void capture_func2 (GtkWidget *, cam *);
-void capture_func (GtkWidget *, cam *);
+//XXX: void capture_func2 (GtkWidget *, cam *);
+void capture_func (GtkWidget *, cam *, gchar*);
 void init_cam (GtkWidget * capture, cam * cam);
-gint timeout_capture_func (cam *);
+//XXX: gint timeout_capture_func (cam *);
 gint fps (GtkWidget *);
 gint timeout_func (cam *);
 gint read_timeout_func (cam *);
@@ -60,13 +60,17 @@ void smooth_func (GtkToggleButton *, gpointer);
 void negative_func (GtkToggleButton *, gpointer);
 void on_scale1_drag_data_received (GtkHScale *, cam *);
 void on_status_show (GtkWidget *, cam *);
-void contrast_change (GtkHScale *, cam *);
-void brightness_change (GtkHScale *, cam *);
-void colour_change (GtkHScale *, cam *);
-void hue_change (GtkHScale *, cam *);
-void wb_change (GtkHScale *, cam *);
+
+//XXX: void contrast_change (GtkHScale *, cam *);
+//XXX: void brightness_change (GtkHScale *, cam *);
+//XXX: void colour_change (GtkHScale *, cam *);
+//XXX: void hue_change (GtkHScale *, cam *);
+//XXX: void wb_change (GtkHScale *, cam *);
+
 gboolean on_drawingarea_expose_event (GtkWidget *, GdkEventExpose *, cam *);
 //XXX: void update_tooltip (cam * cam);
+
+void on_key_press(GtkWidget *,GdkEventKey *, cam*);
 
 G_END_DECLS
 

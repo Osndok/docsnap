@@ -31,19 +31,20 @@ static int print_error (GnomeVFSResult result, const char *uri_string)
     return 1;
 }
 
-int local_save (cam * cam)
+int local_save (cam * cam, gchar* keyqualifier)
 {
 	if (cam->debug == TRUE)
 	{
-		fprintf(stderr,"local_save()\n");
+		fprintf(stderr,"local_save(%s)\n", keyqualifier);
 	}
 
     int fc;
     gchar *filename, *ext;
     time_t t;
-    struct tm *tm;
+    //struct tm *tm;
     char timenow[64], *error_message;
-    int len, mkd;
+    //int len;
+    int mkd;
     gboolean pbs;
     GdkPixbuf *pb;
 
@@ -64,19 +65,15 @@ int local_save (cam * cam)
     //memcpy (cam->tmp, cam->pic_buf, cam->x * cam->y * cam->depth);
 
     time (&t);
-    tm = localtime (&t);
-    len = strftime (timenow, sizeof (timenow) - 1, "%s", tm);
+    //tm = localtime (&t);
+    //len = strftime (timenow, sizeof (timenow) - 1, "%s", tm);
+    snprintf(timenow, sizeof(timenow)-1, "%x", t);
 
     if (cam->debug == TRUE) {
         fprintf (stderr, "time = %s\n", timenow);
     }
 
-    if (cam->timefn == TRUE) {
-        filename =
-            g_strdup_printf ("%s-%s.%s", cam->capturefile, timenow, ext);
-    } else {
-        filename = g_strdup_printf ("%s.%s", cam->capturefile, ext);
-    }
+	filename = g_strdup_printf ("%s-%s.%s", timenow, keyqualifier, ext);
 
     if (cam->debug == TRUE) {
         fprintf (stderr, "filename = %s\n", filename);
