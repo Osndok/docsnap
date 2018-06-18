@@ -615,6 +615,7 @@ void capture_func (GtkWidget* widget, cam* cam, gchar* keyqualifier)
 		memcpy (cam->tmp, cam->pic_buf, cam->x * cam->y * cam->depth);
 	}
 
+	//TODO: update the status bar with 'saving'
     local_save(cam, keyqualifier);
 }
 
