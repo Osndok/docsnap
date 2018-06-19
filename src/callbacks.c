@@ -339,6 +339,26 @@ camorama_filter_color_filter(void* filter, guchar *image, int x, int y, int dept
 //XXX: apply_filters(cam* cam);
 
 /*
+ * v4l has reverse rgb order from what camora expect so call the color
+ * filter to fix things up before running the user selected filters
+ *
+ * Formerly called: camorama_filter_color_filter w/ extra unused arguments
+ */
+void
+reorder_rgb(guchar *image, int x, int y)
+{
+	int i;
+	char tmp;
+	i = x * y;
+	while (i--) {
+		tmp = image[0];
+		image[0] = image[2];
+		image[2] = tmp;
+		image += 3;
+	}
+}
+
+/*
  * Not called on my system... perhaps some cameras (or kernels?) require the direct read() logic, 
  * and not the buffering?
  */
@@ -368,6 +388,7 @@ read_timeout_func(cam* cam) {
     }
     */
 
+	reorder_rgb(cam->pic_buf, cam->x, cam->y);
 	//XXX: apply_filters(cam);
 
     gc = gdk_gc_new (cam->pixmap);
@@ -425,6 +446,7 @@ gint timeout_func (cam * cam)
     }
     */
 
+	reorder_rgb(cam->pic_buf, cam->x, cam->y);
 	//XXX: apply_filters(cam);
 
 	//int bytesPerFrame=(cam->x * cam->y * cam->depth);
