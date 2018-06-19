@@ -282,16 +282,26 @@ main(int argc, char *argv[])
     }
     cam->pixmap = gdk_pixmap_new (NULL, cam->x, cam->y, cam->desk_depth);
 
-    filename = "data/camorama.glade";
 	/*
-        gnome_program_locate_file (NULL,
-                                   GNOME_FILE_DOMAIN_APP_DATADIR,
-                                   "camorama/camorama.glade", TRUE, NULL);
-	*/
+	 * Use the local development glade file, if it is present, otherwise use the
+	 * installed system-wide version.
+	 */
+    filename = "data/camorama.glade";
+
+	if (access(filename, R_OK))
+	{
+		filename = gnome_program_locate_file(
+			NULL,
+			GNOME_FILE_DOMAIN_APP_DATADIR,
+			"camorama/camorama.glade",
+			TRUE,
+			NULL
+		);
+	}
+
     if (filename == NULL)
 	{
-        error_dialog (_
-                      ("Couldn't find the main interface file (camorama.glade)."));
+        error_dialog (_("Couldn't find the main interface file (camorama.glade)."));
         exit (1);
     }
 
@@ -301,6 +311,16 @@ main(int argc, char *argv[])
     //printf("pixfile = %s\n",pixfilename);
     cam->xml = glade_xml_new (filename, NULL, NULL);
     /*eggtray */
+
+    if (!cam->xml)
+    {
+        fprintf(stderr, "unable to load glade interface file: %s\n", filename);
+        exit(1);
+    }
+    else
+    {
+        fprintf(stderr, "using: %s\n", filename);
+    }
 
     /*tray_icon = egg_tray_icon_new ("Our other cool tray icon");
      * button = gtk_button_new_with_label ("This is a another\ncool tray icon");
