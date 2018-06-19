@@ -314,6 +314,9 @@ main(int argc, char *argv[])
     cam->idle_id = gtk_idle_add ((GSourceFunc) pt2Function, (gpointer) cam);
 
     gtk_timeout_add (2000, (GSourceFunc) fps, cam->status);
+
+    print_cam(cam);
+
     gtk_main ();
     v4l1_munmap(cam->pic, cam->vid_buf.size);
     v4l1_close(cam->dev);

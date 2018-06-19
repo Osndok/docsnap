@@ -70,6 +70,8 @@ typedef struct camera {
 	gchar* lastSavedFile;
 } cam;
 
+void print_cam(cam *cam);
+
 void camera_cap (cam *);
 void set_win_info (cam * cam);
 void get_pic_info (cam *);

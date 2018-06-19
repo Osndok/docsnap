@@ -11,12 +11,15 @@ extern int errno;
 //TODO: replace all printf statements with debugging/stdout statements...
 #define printf(...) fprintf(stderr, __VA_ARGS__)
 
-void print_cam(cam *cam){
+void print_cam(cam *cam)
+{
 	printf("\nCamera Info\n");
 	printf("-------------\n");
 	printf("device = %s, x = %d, y = %d\n",cam->video_dev, cam->x,cam->y);
 	printf("depth = %d, desk_depth = %d, size = %d\n",cam->depth,cam->desk_depth,cam->size);
-	printf("capture directory = %s\n",cam->pixdir);
+	printf("color-palette = ");
+	print_palette(cam->vid_pic.palette);
+	printf("\ncapture directory = %s\n",cam->pixdir);
 	//XXX: printf("capture file = %s\n", cam->capturefile);
 	//XXX: printf("remote capture directory = %s, remote capture file = %s\n",cam->rpixdir, cam->rcapturefile);
 	//XXX: printf("remote host = %s, remote login = %s\n",cam->rhost,cam->rlogin);
