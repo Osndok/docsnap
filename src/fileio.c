@@ -133,9 +133,16 @@ int local_save (cam * cam, gchar* keyqualifier)
         return -1;
     }
 
-    fprintf(stdout, "%s/%s\n", cam->pixdir, filename);
+	cam->counter++;
+    fprintf(stdout, "ADD\t%d\t%s\t%s/%s\n", cam->counter, keyqualifier, cam->pixdir, filename);
 	fflush(stdout);
 
-    g_free (filename);
+	if (cam->lastSavedFile)
+	{
+		g_free(cam->lastSavedFile);
+	}
+
+	cam->lastSavedFile=filename;
+    //g_free (filename); (it is retained, off-by-one, in cam->cam->lastSavedFile so we can delete it later, if needed)
     return 0;
 }

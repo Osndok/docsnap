@@ -66,7 +66,8 @@ typedef struct camera {
     GConfClient *gc;
     GladeXML *xml;
     GtkStatusIcon *tray_icon;
-
+	unsigned counter;
+	gchar* lastSavedFile;
 } cam;
 
 void camera_cap (cam *);

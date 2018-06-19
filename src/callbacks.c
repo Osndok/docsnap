@@ -160,7 +160,25 @@ void on_key_press(GtkWidget *mainWindow, GdkEventKey *event, cam* cam)
 {
     if (event->keyval == GDK_BackSpace)
     {
-        fprintf(stderr, "TODO: remove last image: %s\n", "unknown.png");
+		if (cam->lastSavedFile)
+		{
+			//TODO: we should have an option regarding if we should actually delete the file, or just signal
+			//our supervising process of the delete request (which is probably safer in general; race-condition-wise).
+
+			//BUG: lazy! at least use the official max path length constant.
+			char fullPath[1024];
+			snprintf(fullPath, 1024, "%s/%s", cam->pixdir, cam->lastSavedFile);
+			unlink(fullPath);
+
+		    fprintf(stdout, "DEL\t%d\tX\t%s/%s\n", cam->counter, cam->pixdir, cam->lastSavedFile);
+			fflush(stdout);
+			g_free(cam->lastSavedFile);
+			cam->lastSavedFile=NULL;
+		}
+		else
+		{
+			fprintf(stderr, "ERROR: unable to remove more than one previous image\n");
+		}
         return;
     }
 

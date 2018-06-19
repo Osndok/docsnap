@@ -114,6 +114,8 @@ main(int argc, char *argv[])
     cam->size = PICHALF;
     cam->video_dev = NULL;
     cam->read = FALSE;
+	cam->counter = 0;
+	cam->lastSavedFile = NULL;
 
     bindtextdomain (GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR);
     bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
