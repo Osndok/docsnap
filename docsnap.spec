@@ -1,6 +1,6 @@
 Name:           docsnap
-Version:        1.0.0
-Release:        1%{?dist}
+Version:        1.0.1
+Release:        3%{?dist}
 Summary:        Webcam image capture application
 License:        GPLv2+
 URL:            https://github.com/Osndok/docsnap
@@ -31,6 +31,7 @@ rm -rf $RPM_BUILD_ROOT%{_datadir}/locale
 
 mv $RPM_BUILD_ROOT%{_datadir}/applications/{camorama,docsnap}.desktop
 mv $RPM_BUILD_ROOT%{_bindir}/{camorama,docsnap}
+mv $RPM_BUILD_ROOT%{_datadir}/camorama/{camorama,docsnap}.glade
 mv $RPM_BUILD_ROOT%{_datadir}/{camorama,docsnap}
 #mv $RPM_BUILD_ROOT%{_datadir}/doc/{camorama,docsnap}
 

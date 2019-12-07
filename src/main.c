@@ -293,7 +293,7 @@ main(int argc, char *argv[])
 		filename = gnome_program_locate_file(
 			NULL,
 			GNOME_FILE_DOMAIN_APP_DATADIR,
-			"camorama/camorama.glade",
+			"docsnap/docsnap.glade",
 			TRUE,
 			NULL
 		);
@@ -301,7 +301,7 @@ main(int argc, char *argv[])
 
     if (filename == NULL)
 	{
-        error_dialog (_("Couldn't find the main interface file (camorama.glade)."));
+        error_dialog (_("Couldn't find the main interface file (docsnap.glade)."));
         exit (1);
     }
 
