@@ -1,6 +1,6 @@
 Name:           docsnap
 Version:        1.0.1
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Webcam image capture application
 License:        GPLv2+
 URL:            https://github.com/Osndok/docsnap
@@ -9,6 +9,8 @@ BuildRequires:  gcc desktop-file-utils
 BuildRequires:  gettext-devel libv4l-devel gtk3-devel cairo
 BuildRequires:  gdk-pixbuf2-devel
 Requires:       hicolor-icon-theme
+
+Requires: libv4l >= 8:1.16.7
 
 %description
 A simple Gnome webcam capture application designed to feed a larger image-processing workflow.
