@@ -184,7 +184,18 @@ main(int argc, char *argv[])
 	//TODO: also accept directory via environment variable
 	if (directory)
 	{
-	    cam->pixdir = directory;
+	    if (directory[0] == '/')
+	    {
+		    cam->pixdir = directory;
+	    }
+	    else
+	    {
+	        char *pixdir=(char*)g_malloc(2048);
+	        getcwd(pixdir, 2048);
+	        strcat(pixdir, "/");
+	        strcat(pixdir, directory);
+	        cam->pixdir=pixdir;
+	    }
 	}
 	else
 	{
