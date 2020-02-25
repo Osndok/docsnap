@@ -29,10 +29,10 @@
 
 G_BEGIN_DECLS
 
-GtkWidget *main_window, *prefswindow;
-int frames, frames2, seconds;
-GtkWidget *dentry, *entry2, *string_entry, *format_selection;
-GtkWidget *host_entry, *directory_entry, *filename_entry, *login_entry,
+extern GtkWidget *main_window, *prefswindow;
+extern int frames, frames2, seconds;
+extern GtkWidget *dentry, *entry2, *string_entry, *format_selection;
+extern GtkWidget *host_entry, *directory_entry, *filename_entry, *login_entry,
     *pw_entry;
 
 G_END_DECLS

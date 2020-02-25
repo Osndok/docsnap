@@ -21,6 +21,8 @@ extern GtkWidget *host_entry,
     *directory_entry, *filename_entry, *login_entry, *pw_entry;
 int frame;
 
+gint (*pt2Function) (cam *);
+
 /*
  * pref callbacks
  */

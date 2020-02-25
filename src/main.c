@@ -15,6 +15,11 @@
 #include "camorama-display.h"
 #include "camorama-stock-items.h"
 
+GtkWidget *prefswindow;
+int frames, frames2, seconds;
+GtkWidget *dentry, *entry2, *string_entry, *format_selection;
+GtkWidget *host_entry, *protocol, *rdir_entry, *filename_entry;
+
 static gboolean ver = FALSE, max = FALSE, min = FALSE, half =
     FALSE, use_read = FALSE;
 
