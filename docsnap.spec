@@ -1,6 +1,6 @@
 Name:           docsnap
-Version:        1.0.2
-Release:        4%{?dist}
+Version:        1.0.3
+Release:        5%{?dist}
 Summary:        Webcam image capture application
 License:        GPLv2+
 URL:            https://github.com/Osndok/docsnap
